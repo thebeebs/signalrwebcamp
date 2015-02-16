@@ -1,4 +1,4 @@
-# signalrwebcamp
+# Signalr Web  Camp Demo
 This is now demo walk through for the SignalR Chat Demo I complete at UK webcamps: http://thebeebs.co.uk/webcamp
 
 
