@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>demosignalrchathub</Title>
+      <Author>Microsoft Corp.</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>demosignalrchathub</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="csharp" Delimiter="$"><![CDATA[ public class ChatHub : Hub
+    {
+        static List<Tuple<string, string>> messages;
+
+        public ChatHub() {
+
+            if (messages == null) { 
+                messages = new List<Tuple<string, string>>();
+            }
+        }
+        public void Logon()
+        {
+            Clients.Caller.loadHistory(messages);
+        }
+
+        public void Send(string name, string message)
+        {
+            // Call the broadcastMessage method to update clients.
+            messages.Add(new Tuple<string,string>(name, message));
+            Clients.All.broadcastMessage(name, message);
+        }
+    }]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

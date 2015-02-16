@@ -1,0 +1,50 @@
+$(document).ready(function () {
+            $("#alert").hide();
+        });
+
+
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var chat = $.connection.chatHub;
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.loadHistory = function (messages) {
+                console.log("History Should Load");
+                console.log(messages);
+
+                jQuery.each(messages, function (i, val) {
+
+                    var encodedName = $('<div />').text(val.Item1).html();
+                    var encodedMsg = $('<div />').text(val.Item2).html();
+                    // Add the message to the page.
+                    $('#discussion').prepend('<tr><td>' + encodedName
+                        + '</td><td>' + encodedMsg + '</td></tr>');
+                });
+
+
+            }
+            chat.client.broadcastMessage = function (name, message) {
+                // Html encode display name and message.
+                var encodedName = $('<div />').text(name).html();
+                var encodedMsg = $('<div />').text(message).html();
+                // Add the message to the page.
+                $('#discussion').prepend('<tr><td>' + encodedName
+                    + '</td><td>' + encodedMsg + '</td></tr>');
+            };
+            // Set initial focus to message input box.
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+                chat.server.logon();
+                $('#sendmessage').click(function () {
+                    // Call the Send method on the hub.
+                    if ($('#displayname').val() == '' || $('#message').val() == '') {
+                        $("#alert").show();
+                    } else {
+                        chat.server.send($('#displayname').val(), $('#message').val());
+                        // Clear text box and reset focus for next comment.
+                        $('#message').val('').focus();
+                        $("#alert").hide('close');
+                    }
+                });
+            });
+        });
